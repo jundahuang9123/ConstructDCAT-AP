@@ -1,0 +1,42 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+:DatasetShape a sh:NodeShape ;
+  sh:targetClass dcat:Dataset ;
+
+  sh:property [ sh:path dct:title ; sh:minCount 1 ] ;
+  sh:property [ sh:path dct:description ; sh:minCount 1 ] ;
+
+  sh:property [ sh:path dct:issued ; sh:datatype xsd:date ; sh:minCount 1 ] ;
+  sh:property [ sh:path dct:modified ; sh:datatype xsd:date ; sh:minCount 1 ] ;
+
+  sh:property [ sh:path dct:publisher ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+  sh:property [ sh:path dcat:theme ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+  sh:property [ sh:path dct:license ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+
+  sh:property [ sh:path dcat:distribution ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+  sh:property [ sh:path dcat:service ; sh:nodeKind sh:IRI ; sh:minCount 1 ] .
+
+:DistributionShape a sh:NodeShape ;
+  sh:targetClass dcat:Distribution ;
+
+  sh:property [ sh:path dcat:accessURL ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+  sh:property [ sh:path dcat:downloadURL ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+  sh:property [ sh:path dcat:mediaType ; sh:minCount 1 ] ;
+  sh:property [ sh:path dct:format ; sh:minCount 1 ] ;
+  sh:property [ sh:path odrl:hasPolicy ; sh:nodeKind sh:IRI ; sh:minCount 1 ] .
+
+:DataServiceShape a sh:NodeShape ;
+  sh:targetClass dcat:DataService ;
+
+  sh:property [ sh:path dcat:endpointURL ; sh:nodeKind sh:IRI ; sh:minCount 1 ] ;
+  sh:property [ sh:path dcat:endpointDescription ; sh:minCount 1 ] ;
+  sh:property [ sh:path dcat:servesDataset ; sh:nodeKind sh:IRI ; sh:minCount 1 ] .
+
+:OrgShape a sh:NodeShape ;
+  sh:targetClass foaf:Organization ;
+  sh:property [ sh:path foaf:name ; sh:minCount 1 ] .
