@@ -1,0 +1,156 @@
+# YARRRML mapping (DCAT v3 style) - CSV -> RDF
+# Assumed input file: datasets.csv
+#
+# Expected columns in datasets.csv:
+# dataset_id,title,description,issued,modified,publisher_name,theme_uri,keyword,language,license_uri
+# dist_id,dist_access_url,dist_download_url,dist_media_type,dist_format
+# service_id,service_endpoint_url,service_endpoint_desc
+#
+# Notes:
+# - dataset_id/dist_id/service_id should be URL-safe identifiers (no spaces).
+# - theme_uri and license_uri should be full IRIs.
+# - Dates should be ISO 8601 (e.g., 2026-02-01).
+# - keyword may be a single value per row; multiple keywords can be represented as multiple rows for same dataset_id
+#   or you can split in preprocessing.
+
+prefixes:
+  dcat: "http://www.w3.org/ns/dcat#"
+  dct: "http://purl.org/dc/terms/"
+  foaf: "http://xmlns.com/foaf/0.1/"
+  odrl: "http://www.w3.org/ns/odrl/2/"
+  xsd: "http://www.w3.org/2001/XMLSchema#"
+  ex: "https://catalog.example.org/"
+
+mappings:
+
+  catalog:
+    sources:
+      - ['datasets.csv~csv']
+    s: ex:catalog
+    po:
+      - [a, dcat:Catalog]
+      - [dct:title, "Construct-X Data Catalog"]
+      - [dct:description, "DCAT v3-aligned catalog generated from tabular metadata via YARRRML."]
+      - p: dcat:dataset
+        o:
+          value: "ex:dataset/$(dataset_id)"
+          type: iri
+      - p: dct:publisher
+        o:
+          value: ex:org/constructx
+          type: iri
+
+  catalog_publisher:
+    sources:
+      - ['datasets.csv~csv']
+    s: ex:org/constructx
+    po:
+      - [a, foaf:Organization]
+      - [foaf:name, "Construct-X Consortium"]
+
+  dataset:
+    sources:
+      - ['datasets.csv~csv']
+    s: "ex:dataset/$(dataset_id)"
+    po:
+      - [a, dcat:Dataset]
+      - [dct:title, "$(title)"]
+      - [dct:description, "$(description)"]
+      - p: dct:issued
+        o:
+          value: "$(issued)"
+          datatype: xsd:date
+      - p: dct:modified
+        o:
+          value: "$(modified)"
+          datatype: xsd:date
+      - p: dct:publisher
+        o:
+          value: "ex:org/$(dataset_id)"
+          type: iri
+      - p: dcat:theme
+        o:
+          value: "$(theme_uri)"
+          type: iri
+      - [dcat:keyword, "$(keyword)"]
+      - [dct:language, "$(language)"]
+      - p: dct:license
+        o:
+          value: "$(license_uri)"
+          type: iri
+      - p: dcat:distribution
+        o:
+          value: "ex:dist/$(dist_id)"
+          type: iri
+      - p: dcat:service
+        o:
+          value: "ex:service/$(service_id)"
+          type: iri
+
+  dataset_publisher:
+    sources:
+      - ['datasets.csv~csv']
+    s: "ex:org/$(dataset_id)"
+    po:
+      - [a, foaf:Organization]
+      - [foaf:name, "$(publisher_name)"]
+
+  distribution:
+    sources:
+      - ['datasets.csv~csv']
+    s: "ex:dist/$(dist_id)"
+    po:
+      - [a, dcat:Distribution]
+      - p: dcat:accessURL
+        o:
+          value: "$(dist_access_url)"
+          type: iri
+      - p: dcat:downloadURL
+        o:
+          value: "$(dist_download_url)"
+          type: iri
+      - [dcat:mediaType, "$(dist_media_type)"]
+      - [dct:format, "$(dist_format)"]
+      - p: odrl:hasPolicy
+        o:
+          value: "ex:policy/$(dist_id)"
+          type: iri
+
+  policy:
+    sources:
+      - ['datasets.csv~csv']
+    s: "ex:policy/$(dist_id)"
+    po:
+      - [a, odrl:Offer]
+      - p: odrl:permission
+        o:
+          value: "ex:perm/$(dist_id)"
+          type: iri
+
+  permission:
+    sources:
+      - ['datasets.csv~csv']
+    s: "ex:perm/$(dist_id)"
+    po:
+      - [a, odrl:Permission]
+      - p: odrl:action
+        o:
+          value: odrl:use
+          type: iri
+
+  dataservice:
+    sources:
+      - ['datasets.csv~csv']
+    s: "ex:service/$(service_id)"
+    po:
+      - [a, dcat:DataService]
+      - [dct:title, "AAS Technical Data API"]
+      - [dcat:endpointDescription, "$(service_endpoint_desc)"]
+      - p: dcat:endpointURL
+        o:
+          value: "$(service_endpoint_url)"
+          type: iri
+      - p: dcat:servesDataset
+        o:
+          value: "ex:dataset/$(dataset_id)"
+          type: iri
