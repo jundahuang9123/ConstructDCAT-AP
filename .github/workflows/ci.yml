@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch: # Allow manual trigger
 
 permissions:
   contents: write
@@ -41,9 +42,10 @@ jobs:
             backend/out.ttl
             backend/shapes.ttl
             backend/shacl-report.txt
+            backend/docs/ # Upload docs as artifact so you can preview them
 
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'workflow_dispatch' # Only deploy when manually clicked
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: backend/docs
