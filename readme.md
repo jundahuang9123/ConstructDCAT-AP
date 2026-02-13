@@ -15,6 +15,8 @@ Below is the class diagram for the `constructDCAT` extension ontology included i
 
 ```mermaid
 classDiagram
+    %% Styles
+    classDef dcat fill:#f9f,stroke:#333,stroke-width:2px;
     class Location
     class Checksum
     class PeriodOfTime
@@ -41,81 +43,69 @@ classDiagram
     class LinguisticSystem
     class Agent
     class Usage
-    Catalog <|-- Dataset
-    Dataset <|-- Resource
-    DataService <|-- Service
-    DataService <|-- Resource
-    CatalogRecord --o : primaryTopic 
-    CatalogRecord --o : primaryTopic 
-    DatasetSeries <|-- Dataset
-    Distribution --o : accessService 
-    Distribution --o : compressFormat 
-    Distribution --o : packageFormat 
-    Distribution --o : mediaType 
-    Distribution --o : conformsTo 
-    Distribution --o : accessURL 
-    Distribution --o : downloadURL 
-    Distribution --o : byteSize 
-    Distribution --o : spatialResolutionInMeters 
-    Distribution --o : temporalResolution 
-    Relationship <|-- Concept
-    Resource <|-- Catalogued resource
-    Role <|-- Concept
-    Catalog --o : catalog 
-    Catalog --o : dataset 
-    Catalog --o : service 
-    Catalog --o : themeTaxonomy 
-    Catalog --o : hasPart 
-    Catalog --o : record 
-    DataService --o : servesDataset 
-    DataService --o : endpointURL 
-    DataService --o : endpointDescription 
-    Dataset --o : distribution 
-    Dataset --o : spatialResolutionInMeters 
-    Dataset --o : temporalResolution 
-    Dataset --o : inSeries 
-    Dataset --o : prev 
-    Dataset --o : hasVersion 
-    Dataset --o : hasCurrentVersion 
-    Dataset --o : previousVersion 
-    Dataset --o : version 
-    Resource --o : accessService 
-    Resource --o : contactPoint 
-    Resource --o : keyword 
-    Resource --o : landingPage 
-    Resource --o : qualifiedRelation 
-    Resource --o : theme 
-    Resource --o : type 
-    Resource --o : relation 
-    Resource --o : qualifiedAttribution 
-    Resource --o : license 
-    Resource --o : rights 
-    Resource --o : hasPart 
-    Resource --o : isPartOf 
-    Resource --o : policy 
-    Resource --o : temporal 
-    Resource --o : spatial 
-    Resource --o : accrualPeriodicity 
-    Resource --o : identifier 
-    Resource --o : conformsTo 
-    Resource --o : language 
-    Resource --o : publisher 
-    Resource --o : creator 
-    Resource --o : isReferencedBy 
-    Resource --o : version 
-    Resource --o : hasVersion 
-    Resource --o : hasCurrentVersion 
-    Resource --o : previousVersion 
-    Resource --o : replaces 
-    Resource --o : isReplacedBy 
-    Resource --o : requiredBy 
-    Resource --o : requires 
-    Resource --o : source 
-    Resource --o : inSeries 
-    Resource --o : prev 
-    Concept --o : hadRole 
-    Distribution --o : accessService 
-    Resource --o : accessService
+    Dataset <|-- Catalog
+    Dataset <|-- DatasetSeries
+    Resource <|-- DataService
+    Resource <|-- Dataset
+    CatalogRecord ..> CatalogRecord : primaryTopic
+    Distribution ..> DataService : accessService
+    Distribution ..> MediaType : compressFormat
+    Distribution ..> MediaType : packageFormat
+    Distribution ..> MediaType : mediaType
+    Distribution ..> Standard : conformsTo
+    Distribution ..> Resource : accessURL
+    Distribution ..> Resource : downloadURL
+    Relationship ..> Concept : hadRole
+    Resource ..> DataService : accessService
+    Resource ..> Kind : contactPoint
+    Resource ..> Concept : keyword
+    Resource ..> Resource : landingPage
+    Resource ..> Relationship : qualifiedRelation
+    Resource ..> Concept : theme
+    Resource ..> Concept : type
+    Resource ..> Resource : relation
+    Resource ..> Relationship : qualifiedAttribution
+    Resource ..> LicenseDocument : license
+    Resource ..> RightsStatement : rights
+    Resource ..> Resource : hasPart
+    Resource ..> Resource : isPartOf
+    Resource ..> Policy : policy
+    Resource ..> PeriodOfTime : temporal
+    Resource ..> Location : spatial
+    Resource ..> Frequency : accrualPeriodicity
+    Resource ..> Identifier : identifier
+    Resource ..> Standard : conformsTo
+    Resource ..> LinguisticSystem : language
+    Resource ..> Agent : publisher
+    Resource ..> Agent : creator
+    Resource ..> Resource : isReferencedBy
+    Resource ..> Resource : version
+    Resource ..> Resource : hasVersion
+    Resource ..> Resource : hasCurrentVersion
+    Resource ..> Resource : previousVersion
+    Resource ..> Resource : replaces
+    Resource ..> Resource : isReplacedBy
+    Resource ..> Resource : requiredBy
+    Resource ..> Resource : requires
+    Resource ..> Resource : source
+    Resource ..> DatasetSeries : inSeries
+    Resource ..> DatasetSeries : prev
+    Catalog ..> Catalog : catalog
+    Catalog ..> Dataset : dataset
+    Catalog ..> DataService : service
+    Catalog ..> Concept : themeTaxonomy
+    Catalog ..> Resource : hasPart
+    Catalog ..> CatalogRecord : record
+    DataService ..> Dataset : servesDataset
+    DataService ..> Resource : endpointURL
+    DataService ..> Resource : endpointDescription
+    Dataset ..> Distribution : distribution
+    Dataset ..> DatasetSeries : inSeries
+    Dataset ..> Dataset : prev
+    Dataset ..> Dataset : hasVersion
+    Dataset ..> Dataset : hasCurrentVersion
+    Dataset ..> Dataset : previousVersion
+    Dataset ..> Dataset : version
 ```
 
 ## Quick Start

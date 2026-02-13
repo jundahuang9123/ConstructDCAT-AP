@@ -1,8 +1,30 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
-@prefix : <http://example.org/ns/dcat-ap-ext#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/ns/dcat-ap-ext#> .
 
-# Add your SHACL shapes here to validate the extended model
+# Base DCAT-AP Constraints (from original run.sh)
+
+:DatasetShape a sh:NodeShape ;
+  sh:targetClass dcat:Dataset ;
+  sh:property [
+    sh:path dct:title ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path dcat:distribution ;
+    sh:minCount 1 ;
+  ] .
+
+:DistributionShape a sh:NodeShape ;
+  sh:targetClass dcat:Distribution ;
+  sh:property [
+    sh:path dcat:accessURL ;
+    sh:minCount 1 ;
+  ] .
+
+# Extension Constraints
 
 :ExtensionShape a sh:NodeShape ;
     sh:targetClass :SomeExtendedClass ;

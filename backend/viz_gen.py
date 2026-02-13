@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from rdflib import Graph, RDF, RDFS, OWL, Namespace
+from rdflib import Graph, RDF, RDFS, OWL, Namespace, BNode
 
 def generate_mermaid(ttl_file: Path) -> str:
     g = Graph()
@@ -11,42 +11,62 @@ def generate_mermaid(ttl_file: Path) -> str:
     
     # Collect Classes
     for s, p, o in g.triples((None, RDF.type, OWL.Class)):
-        classes.add(s)
+        if not isinstance(s, BNode):
+            classes.add(s)
     for s, p, o in g.triples((None, RDF.type, RDFS.Class)):
-        classes.add(s)
+        if not isinstance(s, BNode):
+            classes.add(s)
 
     # Collect SubClassOf
     for s, o in g.subject_objects(RDFS.subClassOf):
-        if s in classes and o in classes:
-            relationships.append((o, s, " <|-- ")) # Inheritance
+        if not isinstance(s, BNode) and not isinstance(o, BNode):
+            if s in classes and o in classes:
+                relationships.append((o, s, " <|-- ", "")) # Inheritance
 
-    # Collect Properties (symbolic)
-    # This is a simplification. DCAT-AP has many properties. 
-    # We'll just graph relationships between known classes.
+    # Collect Properties (Relationship between classes)
+    # We look for ObjectProperties or just usage in the graph
+    # To avoid graph explosion, we only show properties where both domain and range are known classes
+    # OR where we can infer from usage that s and o are classes we know.
+    
+    # Let's iterate over all triples. If s and o are in our 'classes' set, we draw a link.
     for s, p, o in g:
         if s in classes and o in classes:
-            # s -> o relationship
+            if p == RDF.type or p == RDFS.subClassOf:
+                continue
+            
+            # Label
             label = p.split('#')[-1].split('/')[-1]
-            relationships.append((s, o, f" --o : {label} "))
+            relationships.append((s, o, " ..> ", label))
 
     # Generate Mermaid Syntax
     lines = ["classDiagram"]
+    lines.append("    %% Styles")
+    lines.append("    classDef dcat fill:#f9f,stroke:#333,stroke-width:2px;")
     
     # Add Nodes
     for cls in classes:
         name = cls.split('#')[-1].split('/')[-1]
-        # Sanitize name
         name = name.replace('-', '_').replace('.', '_')
         lines.append(f"    class {name}")
-        # Optionally add label if available
-        # string_label = g.value(cls, RDFS.label)
-        # if string_label: lines.append(f"    {class_name} : {string_label}")
-
-    # Add Edges
-    for s, o, rel in relationships:
-        s_name = s.split('#')[-1].split('/')[-1].replace('-', '_').replace('.', '_')
-        o_name = o.split('#')[-1].split('/')[-1].replace('-', '_').replace('.', '_')
-        if s_name != o_name:
+        
+    # Add Edges (deduplicated)
+    seen_edges = set()
+    for s, o, rel, label in relationships:
+        s_name = s.split('#')[-1].split('/')[-1].replace('-', '_')
+        o_name = o.split('#')[-1].split('/')[-1].replace('-', '_')
+        
+        # Self loops can be messy
+        if s_name == o_name:
+            continue
+            
+        edge_key = (s_name, o_name, rel, label)
+        if edge_key in seen_edges:
+            continue
+        seen_edges.add(edge_key)
+        
+        if label:
+            lines.append(f"    {s_name}{rel}{o_name} : {label}")
+        else:
             lines.append(f"    {s_name}{rel}{o_name}")
 
     return "\n".join(lines)
@@ -61,5 +81,9 @@ if __name__ == "__main__":
         print(f"File not found: {input_file}")
         sys.exit(1)
         
-    diagram = generate_mermaid(input_file)
-    print(diagram)
+    try:
+        diagram = generate_mermaid(input_file)
+        print(diagram)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
