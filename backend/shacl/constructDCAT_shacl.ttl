@@ -1,35 +1,21 @@
-@prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dct: <http://purl.org/dc/terms/> .
+@prefix ext: <http://example.org/ns/dcat-ap-ext#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix : <http://example.org/ns/dcat-ap-ext#> .
 
-# Base DCAT-AP Constraints (from original run.sh)
+ext:DatasetShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:description "A name given to the dataset."@en ;
+            sh:minCount 1 ;
+            sh:path dct:title ] ;
+    sh:targetClass dcat:Dataset .
 
-:DatasetShape a sh:NodeShape ;
-  sh:targetClass dcat:Dataset ;
-  sh:property [
-    sh:path dct:title ;
-    sh:minCount 1 ;
-  ] ;
-  sh:property [
-    sh:path dcat:distribution ;
-    sh:minCount 1 ;
-  ] .
+ext:HealthDatasetShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:integer ;
+            sh:description "Number of patients in the dataset."@en ;
+            sh:maxCount 1 ;
+            sh:minCount 0 ;
+            sh:path ext:patientCount ] ;
+    sh:targetClass ext:HealthDataset .
 
-:DistributionShape a sh:NodeShape ;
-  sh:targetClass dcat:Distribution ;
-  sh:property [
-    sh:path dcat:accessURL ;
-    sh:minCount 1 ;
-  ] .
-
-# Extension Constraints
-
-:ExtensionShape a sh:NodeShape ;
-    sh:targetClass :SomeExtendedClass ;
-    sh:property [
-        sh:path :someProperty ;
-        sh:minCount 1 ;
-        sh:message "Extended class must have someProperty." ;
-    ] .

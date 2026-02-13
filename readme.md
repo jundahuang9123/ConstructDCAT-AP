@@ -17,67 +17,33 @@ Below is the class diagram for the `constructDCAT` extension ontology included i
 classDiagram
     %% Styles
     classDef dcat fill:#f9f,stroke:#333,stroke-width:2px;
-    class Location
-    class Checksum
-    class PeriodOfTime
-    class Policy
-    class Relationship
-    class Distribution
-    class RightsStatement
-    class Frequency
-    class MediaType
-    class CatalogRecord
-    class Catalog
     class Role
-    class Kind
-    class DataService
-    class HasFormat
-    class DatasetSeries
-    class Standard
-    class Concept
     class Dataset
-    class ProvenanceStatement
-    class LicenseDocument
-    class Identifier
+    class Relationship
+    class CatalogRecord
     class Resource
-    class LinguisticSystem
-    class Agent
-    class Usage
+    class Distribution
+    class Catalog
+    class HealthDataset
+    class DataService
+    class DatasetSeries
+    Dataset <|-- HealthDataset
     Dataset <|-- Catalog
     Dataset <|-- DatasetSeries
     Resource <|-- DataService
     Resource <|-- Dataset
     CatalogRecord ..> CatalogRecord : primaryTopic
     Distribution ..> DataService : accessService
-    Distribution ..> MediaType : compressFormat
-    Distribution ..> MediaType : packageFormat
-    Distribution ..> MediaType : mediaType
-    Distribution ..> Standard : conformsTo
     Distribution ..> Resource : accessURL
     Distribution ..> Resource : downloadURL
-    Relationship ..> Concept : hadRole
+    Relationship ..> Resource : relation
     Resource ..> DataService : accessService
-    Resource ..> Kind : contactPoint
-    Resource ..> Concept : keyword
-    Resource ..> Resource : landingPage
+    Resource ..> Resource : langingPage
     Resource ..> Relationship : qualifiedRelation
-    Resource ..> Concept : theme
-    Resource ..> Concept : type
     Resource ..> Resource : relation
     Resource ..> Relationship : qualifiedAttribution
-    Resource ..> LicenseDocument : license
-    Resource ..> RightsStatement : rights
     Resource ..> Resource : hasPart
     Resource ..> Resource : isPartOf
-    Resource ..> Policy : policy
-    Resource ..> PeriodOfTime : temporal
-    Resource ..> Location : spatial
-    Resource ..> Frequency : accrualPeriodicity
-    Resource ..> Identifier : identifier
-    Resource ..> Standard : conformsTo
-    Resource ..> LinguisticSystem : language
-    Resource ..> Agent : publisher
-    Resource ..> Agent : creator
     Resource ..> Resource : isReferencedBy
     Resource ..> Resource : version
     Resource ..> Resource : hasVersion
@@ -93,7 +59,6 @@ classDiagram
     Catalog ..> Catalog : catalog
     Catalog ..> Dataset : dataset
     Catalog ..> DataService : service
-    Catalog ..> Concept : themeTaxonomy
     Catalog ..> Resource : hasPart
     Catalog ..> CatalogRecord : record
     DataService ..> Dataset : servesDataset
