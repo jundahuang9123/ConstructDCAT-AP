@@ -9,6 +9,7 @@ docker run --rm -v "$PWD":/data python:3.11-slim bash -lc "
   python excel_to_ontology.py
   echo "📊 Generating visualization..."
   python viz_gen.py ontology/constructDCAT.ttl
+  ./backend/generate_docs.sh
 "
 
 echo "✅ Ontology updated."
