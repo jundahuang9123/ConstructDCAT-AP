@@ -63,6 +63,7 @@ TTL
 docker run --rm -v "$PWD":/data python:3.11-slim bash -lc "
   pip -q install pyshacl rdflib >/dev/null
   python - << 'PY'
+import sys
 from pyshacl import validate
 from rdflib import Graph
 data_g = Graph().parse('/data/${TTL}', format='turtle')
@@ -79,6 +80,8 @@ conforms, report_g, report_text = validate(
 open('/data/${REPORT}','w',encoding='utf-8').write(report_text)
 print('SHACL conforms:', conforms)
 print('Report written to /data/${REPORT}')
+if not conforms:
+    sys.exit(1)
 PY
 "
 

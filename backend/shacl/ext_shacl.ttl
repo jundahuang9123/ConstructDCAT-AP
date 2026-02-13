@@ -1,0 +1,13 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <http://example.org/ns/dcat-ap-ext#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+
+# Add your SHACL shapes here to validate the extended model
+
+:ExtensionShape a sh:NodeShape ;
+    sh:targetClass :SomeExtendedClass ;
+    sh:property [
+        sh:path :someProperty ;
+        sh:minCount 1 ;
+        sh:message "Extended class must have someProperty." ;
+    ] .

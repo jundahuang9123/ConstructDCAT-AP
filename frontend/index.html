@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCAT-AP Builder</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DCAT-AP Builder</h1>
+            <p class="subtitle">Convert Excel to DCAT-AP RDF with SHACL Validation</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <div class="drop-zone" id="dropZone">
+                    <span class="icon">📂</span>
+                    <p>Drag & Drop your Excel file here</p>
+                    <p class="small">or click to browse</p>
+                    <input type="file" id="fileInput" accept=".xlsx" hidden>
+                </div>
+                <button id="convertBtn" class="btn primary" disabled>Convert & Validate</button>
+            </section>
+
+            <section id="statusSection" class="status-section hidden">
+                <div class="loader hidden"></div>
+                <p id="statusText"></p>
+            </section>
+
+            <section id="resultSection" class="result-section hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Validation Report</h2>
+                        <span id="badge" class="badge"></span>
+                    </div>
+                    <pre id="reportContent" class="code-block"></pre>
+                    <div class="actions">
+                        <a id="downloadLink" href="#" class="btn secondary" download="dcat-ap.ttl">Download TTL</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
