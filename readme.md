@@ -15,7 +15,107 @@ Below is the class diagram for the `constructDCAT` extension ontology included i
 
 ```mermaid
 classDiagram
-    class Ontology
+    class Location
+    class Checksum
+    class PeriodOfTime
+    class Policy
+    class Relationship
+    class Distribution
+    class RightsStatement
+    class Frequency
+    class MediaType
+    class CatalogRecord
+    class Catalog
+    class Role
+    class Kind
+    class DataService
+    class HasFormat
+    class DatasetSeries
+    class Standard
+    class Concept
+    class Dataset
+    class ProvenanceStatement
+    class LicenseDocument
+    class Identifier
+    class Resource
+    class LinguisticSystem
+    class Agent
+    class Usage
+    Catalog <|-- Dataset
+    Dataset <|-- Resource
+    DataService <|-- Service
+    DataService <|-- Resource
+    CatalogRecord --o : primaryTopic 
+    CatalogRecord --o : primaryTopic 
+    DatasetSeries <|-- Dataset
+    Distribution --o : accessService 
+    Distribution --o : compressFormat 
+    Distribution --o : packageFormat 
+    Distribution --o : mediaType 
+    Distribution --o : conformsTo 
+    Distribution --o : accessURL 
+    Distribution --o : downloadURL 
+    Distribution --o : byteSize 
+    Distribution --o : spatialResolutionInMeters 
+    Distribution --o : temporalResolution 
+    Relationship <|-- Concept
+    Resource <|-- Catalogued resource
+    Role <|-- Concept
+    Catalog --o : catalog 
+    Catalog --o : dataset 
+    Catalog --o : service 
+    Catalog --o : themeTaxonomy 
+    Catalog --o : hasPart 
+    Catalog --o : record 
+    DataService --o : servesDataset 
+    DataService --o : endpointURL 
+    DataService --o : endpointDescription 
+    Dataset --o : distribution 
+    Dataset --o : spatialResolutionInMeters 
+    Dataset --o : temporalResolution 
+    Dataset --o : inSeries 
+    Dataset --o : prev 
+    Dataset --o : hasVersion 
+    Dataset --o : hasCurrentVersion 
+    Dataset --o : previousVersion 
+    Dataset --o : version 
+    Resource --o : accessService 
+    Resource --o : contactPoint 
+    Resource --o : keyword 
+    Resource --o : landingPage 
+    Resource --o : qualifiedRelation 
+    Resource --o : theme 
+    Resource --o : type 
+    Resource --o : relation 
+    Resource --o : qualifiedAttribution 
+    Resource --o : license 
+    Resource --o : rights 
+    Resource --o : hasPart 
+    Resource --o : isPartOf 
+    Resource --o : policy 
+    Resource --o : temporal 
+    Resource --o : spatial 
+    Resource --o : accrualPeriodicity 
+    Resource --o : identifier 
+    Resource --o : conformsTo 
+    Resource --o : language 
+    Resource --o : publisher 
+    Resource --o : creator 
+    Resource --o : isReferencedBy 
+    Resource --o : version 
+    Resource --o : hasVersion 
+    Resource --o : hasCurrentVersion 
+    Resource --o : previousVersion 
+    Resource --o : replaces 
+    Resource --o : isReplacedBy 
+    Resource --o : requiredBy 
+    Resource --o : requires 
+    Resource --o : source 
+    Resource --o : inSeries 
+    Resource --o : prev 
+    Concept --o : hadRole 
+    Distribution --o : accessService 
+    Resource --o : accessService
 ```
 
 ## Quick Start
